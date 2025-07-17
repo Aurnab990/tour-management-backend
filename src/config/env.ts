@@ -7,7 +7,6 @@ interface envTypes {
   DB_URL: string;
   NODE_ENV: "development" | "production";
 }
-
 const loadEnvVariables = (): envTypes => {
   const requiredEnvVariables: string[] = ["PORT", "DB_URL", "NODE_ENV"];
 

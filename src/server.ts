@@ -52,7 +52,7 @@ process.on("uncaughtException",(err)=>{
 });
 
 process.on("SIGTERM",()=>{
-    console.log("SIGTERM rejection detected... Server shutting down");
+    // console.log("SIGTERM rejection detected... Server shutting down");
     if(server){
         server.close(()=>{
             process.exit(1);
