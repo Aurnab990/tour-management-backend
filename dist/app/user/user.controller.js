@@ -8,20 +8,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const user_route_1 = require("./app/user/user.route");
-const cors_1 = __importDefault(require("cors"));
-const app = (0, express_1.default)();
-app.use(express_1.default.json());
-app.use((0, cors_1.default)());
-app.use("/api/v1/user", user_route_1.userRoutes);
-app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(201).json({
-        message: "Welcome to Tour management home-page"
-    });
-}));
-exports.default = app;
+exports.userController = void 0;
+const user_model_1 = require("./user.model");
+const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { name, email } = req.body;
+        const user = yield user_model_1.User.create({
+            name,
+            email
+        });
+        res.status(201).json({
+            success: true,
+            message: "User created successfully",
+            user
+        });
+    }
+    catch (error) {
+        console.log(error);
+        res.status(400).json({
+            success: false,
+            message: `Something went wrong ${error.message}`
+        });
+    }
+});
+exports.userController = {
+    createUser,
+};

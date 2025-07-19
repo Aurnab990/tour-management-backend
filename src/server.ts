@@ -2,11 +2,11 @@ import express, { Request, Response } from "express";
 import { Server } from "http";
 import mongoose from "mongoose";
 import { envVars } from "./config/env";
+import app from "./app";
 
 
 let server: Server;
-const app = express();
-app.use(express.json());
+
 
 const db_url = envVars.DB_URL;
 const port = envVars.PORT;
@@ -25,12 +25,9 @@ const startServer = async () => {
   }
 };
 
-app.get('/', async(req: Request, res: Response) => {
-    res.status(201).json({
-        message: "Welcome to Tour management home-page"
-    })
-});
 
+
+//ERROR HANDLING WITH TYPES
 process.on("unhandledRejection",(err)=>{
     console.log("Unhandled rejection detected... Server shutting down", err);
     if(server){

@@ -12,19 +12,52 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const app = (0, express_1.default)();
+const env_1 = require("./config/env");
+const app_1 = __importDefault(require("./app"));
 let server;
-try {
-    const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
-        yield mongoose_1.default.connect("mongodb+srv://nirobaurnab:Nv2qM8aPvok2LasEe@cluster0.9h2co2d.mongodb.net/librarydata?retryWrites=true&w=majority&appName=Cluster0");
+const db_url = env_1.envVars.DB_URL;
+const port = env_1.envVars.PORT;
+const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield mongoose_1.default.connect(db_url);
         console.log("DB connected");
-        server = app.listen(5000, () => {
-            console.log(`Server running on port 5000`);
+        server = app_1.default.listen(port, () => {
+            console.log(`Server is connected on PORT ${port}`);
         });
-    });
-}
-catch (error) {
-    console.log("Error occured: ", error);
-}
+    }
+    catch (error) {
+        console.log("Error occured: ", error);
+    }
+});
+//ERROR HANDLING WITH TYPES
+process.on("unhandledRejection", (err) => {
+    console.log("Unhandled rejection detected... Server shutting down", err);
+    if (server) {
+        server.close(() => {
+            process.exit(1);
+        });
+    }
+    process.exit(1);
+});
+process.on("uncaughtException", (err) => {
+    console.log("uncaughtExceptio rejection detected... Server shutting down", err);
+    if (server) {
+        server.close(() => {
+            process.exit(1);
+        });
+    }
+    process.exit(1);
+});
+process.on("SIGTERM", () => {
+    // console.log("SIGTERM rejection detected... Server shutting down");
+    if (server) {
+        server.close(() => {
+            process.exit(1);
+        });
+    }
+    process.exit(1);
+});
+// Promise.reject(new Error("I forgot error"));
+// throw new Error("Uncauth error");
+startServer();
