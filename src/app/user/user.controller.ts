@@ -1,13 +1,11 @@
-import { Request, Response } from "express";
-import { User } from "./user.model";
+import { NextFunction, Request, Response } from "express";
+import { userService } from "./user.service";
+import AppError from "../errorhalpers/appError";
 
-const createUser = async(req: Request, res: Response) => {
+const createUser = async(req: Request, res: Response, next: NextFunction) => {
     try {
-        const {name, email} = req.body;
-        const user = await User.create({
-            name,
-            email
-        });
+        throw new AppError(400,"fake error");
+       const user = await userService.createUser(req.body);
         res.status(201).json({
             success: true,
             message: "User created successfully",
@@ -16,10 +14,7 @@ const createUser = async(req: Request, res: Response) => {
 
     } catch (error: any) {
         console.log(error);
-        res.status(400).json({
-            success: false,
-            message: `Something went wrong ${error.message}`
-        });
+        next(error);
     }
 }
 
