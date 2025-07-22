@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { userService } from "./user.service";
 import AppError from "../errorhalpers/appError";
 
+
 const createUser = async(req: Request, res: Response, next: NextFunction) => {
     try {
         throw new AppError(400,"fake error");

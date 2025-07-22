@@ -8,16 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userController = void 0;
-const user_model_1 = require("./user.model");
-const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const user_service_1 = require("./user.service");
+const appError_1 = __importDefault(require("../errorhalpers/appError"));
+const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { name, email } = req.body;
-        const user = yield user_model_1.User.create({
-            name,
-            email
-        });
+        throw new appError_1.default(400, "fake error");
+        const user = yield user_service_1.userService.createUser(req.body);
         res.status(201).json({
             success: true,
             message: "User created successfully",
@@ -26,10 +27,7 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
     catch (error) {
         console.log(error);
-        res.status(400).json({
-            success: false,
-            message: `Something went wrong ${error.message}`
-        });
+        next(error);
     }
 });
 exports.userController = {
