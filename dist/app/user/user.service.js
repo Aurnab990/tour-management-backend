@@ -19,6 +19,17 @@ const createUser = (playload) => __awaiter(void 0, void 0, void 0, function* () 
     });
     return user;
 });
+const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
+    const users = yield user_model_1.User.find({});
+    const totalUsers = yield user_model_1.User.countDocuments();
+    return {
+        data: users,
+        meta: {
+            totalUsers
+        }
+    };
+});
 exports.userService = {
-    createUser
+    createUser,
+    getAllUsers,
 };
